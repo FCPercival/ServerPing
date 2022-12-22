@@ -9,7 +9,10 @@
     "43"
   ],
   "url": "https://github.com/FCPercival/ServerPing",
-  "version": 1
+  "version": 1,
+  "dependencies": [
+	"fileUtils"
+  ]
 
 
 }
