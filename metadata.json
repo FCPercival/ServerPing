@@ -1,0 +1,15 @@
+{
+  "name": "Server Ping",
+  "description": "Show if your servers are on",
+  "uuid": "serverping@fcpercival",
+  "shell-version": [
+    "40",
+    "41",
+    "42",
+    "43"
+  ],
+  "url": "https://github.com/fcpercival",
+  "version": 1
+
+
+}
