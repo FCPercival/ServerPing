@@ -150,6 +150,7 @@ function disable() {
 
     // Removes the indicator model from the panel
     myPopup.destroy();
+    myPopup=null;
 }
 
 
