@@ -1,3 +1,5 @@
+'use strict';
+
 const Main = imports.ui.main;
 const St = imports.gi.St;
 const GObject = imports.gi.GObject;
@@ -11,6 +13,12 @@ const FileUtils = Me.imports.fileUtils; // Import the "fileUtils" module to read
 
 let myPopup;
 let timer;
+const UPDTEDLY="update-interval";
+const LIMITFORGOOD = "limitforgood";
+const LIMITFORBAD="limitforbad";
+let tagWatchOUT;
+let tagWatchERR;
+let feedsArray;
 
 const MyPopup = GObject.registerClass( class MyPopup extends PanelMenu.Button {
 
@@ -52,19 +60,42 @@ const MyPopup = GObject.registerClass( class MyPopup extends PanelMenu.Button {
         let address = this.addresses[i].address;
         let name = this.addresses[i].name;
 
-        let [res, out, err, status]= GLib.spawn_command_line_sync('ping -c 1 ' + address);
-        let responseTimelabel;
-        try{
-          responseTimelabel= parseInt(out.toString().match(/time=(\d+)/)[1]);
-        }catch (TypeError){
-          let color = 'flag';
-          this.menu.addMenuItem(new PopupMenu.PopupImageMenuItem(name + ': inf ms', color));
-        }
+        //let [res, out, err, status]= GLib.spawn_command_line_sync('ping -c 1 ' + address);
+        let success, child_pid, std_in, std_out, std_err;
+        let command = ["ping","-c 1", address];
+        [success, child_pid, std_in, std_out, std_err] = GLib.spawn_async_with_pipes(
+            null,
+            command,
+            null,
+            GLib.SpawnFlags.SEARCH_PATH,
+            null);
+
+        //GLib.close(this.std_in);
+
+
+        //this.IOchannelOUT = GLib.IOChannel.unix_new(this.std_out);
+        //this.IOchannelERR = GLib.IOChannel.unix_new(this.std_err);
+//
+        //tagWatchOUT = GLib.io_add_watch(this.IOchannelOUT, GLib.PRIORITY_DEFAULT,
+        //    GLib.IOCondition.IN | GLib.IOCondition.HUP, this.loadPipeOUT );
+//
+        //tagWatchERR = GLib.io_add_watch(this.IOchannelERR, GLib.PRIORITY_DEFAULT,
+        //    GLib.IOCondition.IN | GLib.IOCondition.HUP,this.loadPipeERR );
+
+
+        //log(std_out);
+        let responseTimelabel= std_out;
+        //try{
+        //  responseTimelabel= parseInt(out.toString().match(/time=(\d+)/)[1]);
+        //}catch (TypeError){
+        //  let color = 'flag';
+        //  this.menu.addMenuItem(new PopupMenu.PopupImageMenuItem(name + ': inf ms', color));
+        //}
 
 
         let color;
         try{
-            if (status == 0) {
+            if (success === true) {
                 if (responseTimelabel < 100) {
                     //color = new St.Icon({
                     //  icon_name : 'security-low-symbolic',
@@ -130,17 +161,18 @@ const MyPopup = GObject.registerClass( class MyPopup extends PanelMenu.Button {
 });
 
 function enable() {
+
+    // Create the new indicator model
+    myPopup = new MyPopup()
+
     // Initialize the ping timer
     timer = Mainloop.timeout_add(5000, function() {
         myPopup.update();
         return true;
     });
 
-    // Create the new indicator model
-    myPopup = new MyPopup();
-
     // Adds the indicator model to the panel
-    Main.panel.addToStatusArea('ping-indicator', myPopup);
+    Main.panel.addToStatusArea('ping-indicator', myPopup, 0, 'right');
 }
 
 function disable() {
