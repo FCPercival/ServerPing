@@ -13,12 +13,6 @@ const FileUtils = Me.imports.fileUtils; // Import the "fileUtils" module to read
 
 let myPopup;
 let timer;
-const UPDTEDLY="update-interval";
-const LIMITFORGOOD = "limitforgood";
-const LIMITFORBAD="limitforbad";
-let tagWatchOUT;
-let tagWatchERR;
-let feedsArray;
 
 const MyPopup = GObject.registerClass( class MyPopup extends PanelMenu.Button {
 
@@ -70,17 +64,7 @@ const MyPopup = GObject.registerClass( class MyPopup extends PanelMenu.Button {
             GLib.SpawnFlags.SEARCH_PATH,
             null);
 
-        //GLib.close(this.std_in);
-
-
-        //this.IOchannelOUT = GLib.IOChannel.unix_new(this.std_out);
-        //this.IOchannelERR = GLib.IOChannel.unix_new(this.std_err);
-//
-        //tagWatchOUT = GLib.io_add_watch(this.IOchannelOUT, GLib.PRIORITY_DEFAULT,
-        //    GLib.IOCondition.IN | GLib.IOCondition.HUP, this.loadPipeOUT );
-//
-        //tagWatchERR = GLib.io_add_watch(this.IOchannelERR, GLib.PRIORITY_DEFAULT,
-        //    GLib.IOCondition.IN | GLib.IOCondition.HUP,this.loadPipeERR );
+        GLib.close(std_in);
 
 
         //log(std_out);
