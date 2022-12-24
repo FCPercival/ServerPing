@@ -66,6 +66,22 @@ const MyPopup = GObject.registerClass( class MyPopup extends PanelMenu.Button {
 
         GLib.close(std_in);
 
+        //! THIS CODE COULD FREEZE THE SHELL
+        //try {
+        //    [success, child_pid, std_in, std_out, std_err] = GLib.spawn_async(
+        //        null,
+        //        command,
+        //        null,
+        //        GLib.SpawnFlags.SEARCH_PATH,
+        //        null
+        //    );
+        //    GLib.close(std_in);
+        //} catch (err) {
+        //    log('[ServerPing]: '+err);
+        //}
+
+
+
 
         //log(std_out);
         let responseTimelabel= std_out;
